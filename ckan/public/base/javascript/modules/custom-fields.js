@@ -19,7 +19,7 @@ this.ckan.module('custom-fields', function (jQuery, _) {
     initialize: function () {
       if (!jQuery('html').hasClass('ie7')) {
         jQuery.proxyAll(this, /_on/);
-
+        console.log(this.options.fieldSelector);
         var delegated = this.options.fieldSelector + ':last input:first';
         this.el.on('change', delegated, this._onChange);
         this.el.on('change', ':checkbox', this._onRemove);
@@ -90,14 +90,14 @@ this.ckan.module('custom-fields', function (jQuery, _) {
      */
     _onChange: function (event) {
       if (event.target.value !== '') {
-        var parent = jQuery(event.target).parents('.control-custom');
+        var parent = jQuery(event.target).parents(this.options.fieldSelector);
         this.newField(parent);
       }
     },
 
     /* Event handler called when the remove checkbox is checked */
     _onRemove: function (event) {
-      var parent = jQuery(event.target).parents('.control-custom');
+      var parent = jQuery(event.target).parents(this.options.fieldSelector);
       this.disableField(parent, event.target.checked);
     }
   };
