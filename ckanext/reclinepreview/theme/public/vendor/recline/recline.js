@@ -3518,6 +3518,32 @@ my.Map = Backbone.View.extend({
 
   },
 
+    // Private: convert DMS coordinates to decimal
+  //
+  // north and east are positive, south and west are negative
+  //
+  _parseCoordinateString: function(coord){
+    if (typeof(coord) != 'string' || !coord) {
+      return(parseFloat(coord));
+    }
+
+    var dms = coord.split(/[^\.\d\w]+/);
+    var deg = 0; var m = 0;
+    var toDeg = [1, 60, 3600]; // conversion factors for Deg, min, sec
+    var i;
+    for (i = 0; i < dms.length; ++i) {
+        if (isNaN(parseFloat(dms[i]))) {
+          continue;
+        }
+        deg += parseFloat(dms[i]) / toDeg[m];
+        m += 1;
+    }
+    if (coord.match(/[SW]/)) {
+          deg = -1*deg;
+    }
+    return(deg);
+  },
+
   // Private: Return a GeoJSON geomtry extracted from the record fields
   //
   _getGeometryFromRecord: function(doc){
@@ -3533,8 +3559,8 @@ my.Map = Backbone.View.extend({
       if (typeof(value) === 'string') {
         value = value.replace('(', '').replace(')', '');
         var parts = value.split(',');
-        var lat = parseFloat(parts[0]);
-        var lon = parseFloat(parts[1]);
+        var lat = this._parseCoordinateString(parts[0]);
+        var lon = this._parseCoordinateString(parts[1]);
         if (!isNaN(lon) && !isNaN(parseFloat(lat))) {
           return {
             "type": "Point",
@@ -3562,6 +3588,8 @@ my.Map = Backbone.View.extend({
       // We'll create a GeoJSON like point object from the two lat/lon fields
       var lon = doc.get(this.state.get('lonField'));
       var lat = doc.get(this.state.get('latField'));
+      lon = this._parseCoordinateString(lon);
+      lat = this._parseCoordinateString(lat);
       if (!isNaN(parseFloat(lon)) && !isNaN(parseFloat(lat))) {
         return {
           type: 'Point',
