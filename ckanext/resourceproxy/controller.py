@@ -8,7 +8,7 @@ import ckan.lib.base as base
 
 log = getLogger(__name__)
 
-MAX_FILE_SIZE = 1024 * 1024  # 1MB
+MAX_FILE_SIZE = 1024 * 1024 * 2  # 2MB
 CHUNK_SIZE = 512
 
 
