@@ -1735,7 +1735,7 @@ def featured_group_org(items, get_action, list_action, count):
 def get_site_statistics():
     stats = {}
     stats['dataset_count'] = logic.get_action('package_search')(
-        {}, {"rows": 1})['count']
+        {}, {"rows": 1, "q": "type:dataset"})['count']
     stats['group_count'] = len(logic.get_action('group_list')({}, {}))
     stats['organization_count'] = len(
         logic.get_action('organization_list')({}, {}))

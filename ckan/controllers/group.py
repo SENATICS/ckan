@@ -208,7 +208,7 @@ class GroupController(base.BaseController):
             q += ' owner_org:"%s"' % c.group_dict.get('id')
         else:
             q += ' groups:"%s"' % c.group_dict.get('name')
-
+        q += ' type:"dataset"'
         c.description_formatted = h.render_markdown(c.group_dict.get('description'))
 
         context['return_query'] = True

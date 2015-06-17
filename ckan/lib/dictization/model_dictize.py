@@ -23,7 +23,7 @@ def group_list_dictize(obj_list, context,
 
     if with_package_counts:
         query = search.PackageSearchQuery()
-        q = {'q': '+capacity:public' if not with_private else '*:*',
+        q = {'q': '+capacity:public type:dataset' if not with_private else '*:*',
              'fl': 'groups', 'facet.field': ['groups', 'owner_org'],
              'facet.limit': -1, 'rows': 1}
         query.run(q)
